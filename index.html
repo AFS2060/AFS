@@ -1041,12 +1041,12 @@
       </div>
       <div class="webinar-form">
         <form action="https://formspree.io/f/xbdenrob" method="POST">
-          <input type="hidden" name="_subject" value="New Webinar Registration — AFS Masterclass">
+          <input type="hidden" name="_subject" value="AFS Webinar Registration">
           <input type="hidden" name="_next" value="https://afs.cash/thank-you.html">
-          <input type="hidden" name="form_type" value="Webinar Registration">
-          <input type="hidden" name="selected_day" id="hidden_day" value="">
-          <input type="hidden" name="selected_time" id="hidden_time" value="">
-          <input type="hidden" name="selected_date" id="hidden_date" value="">
+          <input type="hidden" name="form_type" value="Webinar">
+          <input type="hidden" name="selected_day" id="hidden_day" value="Not selected">
+          <input type="hidden" name="selected_time" id="hidden_time" value="Not selected">
+          <input type="hidden" name="selected_date" id="hidden_date" value="Not selected">
 
           <div class="wf-row">
             <div class="wf-field">
@@ -1071,35 +1071,28 @@
 
           <!-- DAY SELECTOR -->
           <div class="wf-field">
-            <label>Select Your Preferred Day <span class="wf-req">✦</span></label>
-            <div class="day-selector">
-              <div class="day-btn" onclick="selectDay('Sunday', this)">
-                <span class="day-name">☀️ Sunday</span>
-                <span class="day-sub">Weekly</span>
-              </div>
-              <div class="day-btn" onclick="selectDay('Tuesday', this)">
-                <span class="day-name">📅 Tuesday</span>
-                <span class="day-sub">Weekly</span>
-              </div>
-              <div class="day-btn" onclick="selectDay('Thursday', this)">
-                <span class="day-name">📅 Thursday</span>
-                <span class="day-sub">Weekly</span>
-              </div>
-            </div>
+            <label>Preferred Day <span class="wf-req">✦</span></label>
+            <select name="selected_day" id="hidden_day" required>
+              <option value="">Select a day</option>
+              <option value="Sunday">☀️ Sunday — Weekly</option>
+              <option value="Tuesday">📅 Tuesday — Weekly</option>
+              <option value="Thursday">📅 Thursday — Weekly</option>
+            </select>
           </div>
 
-          <!-- TIME SLOTS -->
+          <!-- TIME SLOT -->
           <div class="wf-field">
-            <label>Select Your Time <span class="wf-req">✦</span></label>
-            <div class="time-slots">
-              <div class="time-slot" onclick="selectTime('7:00 PM EST', this)">7:00 PM EST</div>
-              <div class="time-slot" onclick="selectTime('8:00 PM EST', this)">8:00 PM EST</div>
-              <div class="time-slot" onclick="selectTime('12:00 PM EST', this)">12:00 PM EST</div>
-              <div class="time-slot" onclick="selectTime('2:00 PM EST', this)">2:00 PM EST</div>
-            </div>
+            <label>Preferred Time <span class="wf-req">✦</span></label>
+            <select name="selected_time" id="hidden_time" required>
+              <option value="">Select a time</option>
+              <option value="12:00 PM EST">12:00 PM EST</option>
+              <option value="2:00 PM EST">2:00 PM EST</option>
+              <option value="7:00 PM EST">7:00 PM EST</option>
+              <option value="8:00 PM EST">8:00 PM EST</option>
+            </select>
           </div>
 
-          <!-- MINI CALENDAR -->
+          <!-- CALENDAR DATE -->
           <div class="wf-field">
             <label>Pick Your Date <span class="wf-req">✦</span></label>
             <div class="mini-cal">
@@ -1119,7 +1112,7 @@
                 <div class="cal-legend-item"><div class="cal-dot" style="background:#CCC"></div> Unavailable</div>
               </div>
             </div>
-            <div id="cal-selected-display" style="font-size:0.78rem;color:var(--text-sub);margin-top:4px;"></div>
+            <input type="text" name="selected_date" id="hidden_date" placeholder="Click a date above to select" readonly required style="margin-top:6px;background:var(--cream);cursor:pointer;">
           </div>
 
           <div class="wf-field">
@@ -1457,15 +1450,9 @@
     selectedDate = monthNames[currentMonth] + ' ' + d + ', ' + currentYear;
     selectedDay = dayNames[dow];
     document.getElementById('hidden_date').value = selectedDate;
-    document.getElementById('hidden_day').value = selectedDay;
-    document.getElementById('cal-selected-display').textContent = '✦ Selected: ' + dayNames[dow] + ', ' + selectedDate;
-    // Auto-select matching day button
-    document.querySelectorAll('.day-btn').forEach(btn => {
-      btn.classList.remove('selected');
-      if (btn.querySelector('.day-name').textContent.includes(dayNames[dow])) {
-        btn.classList.add('selected');
-      }
-    });
+    // Auto-select matching day dropdown
+    const daySelect = document.getElementById('hidden_day');
+    if (daySelect) daySelect.value = dayNames[dow];
   }
 
   function changeMonth(dir) {
